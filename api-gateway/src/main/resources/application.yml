@@ -1,0 +1,94 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - http://localhost:4200
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+      routes:
+
+        # AUTH
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+
+        # USER
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+
+        # CROP
+        - id: crop-service
+          uri: lb://crop-service
+          predicates:
+            - Path=/crop/**
+          filters:
+            - StripPrefix=1
+
+        # ORDER
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1
+
+        # DEALER
+        - id: dealer-service
+          uri: lb://dealer-service
+          predicates:
+            - Path=/dealer/**
+          # NO StripPrefix
+
+        # FARMER
+        - id: farmer-service
+          uri: lb://farmer-service
+          predicates:
+            - Path=/farmer/**
+          filters:
+            - StripPrefix=1
+
+        # ADMIN
+        - id: admin-user-management-service
+          uri: lb://admin-user-management-service
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+  instance:
+    prefer-ip-address: true
+
+jwt:
+  secret: cropdeal-super-secret-key-for-jwt-authentication
