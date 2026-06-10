@@ -1,0 +1,107 @@
+<div class="page-container">
+  <div class="list-header">
+    <div>
+      <h1 class="page-title">🌾 My Crops</h1>
+      <p class="page-subtitle">View all your listed crops on the marketplace</p>
+    </div>
+    <button (click)="loadCrops()" class="btn-load">
+      🔄 Load Crops
+    </button>
+  </div>
+
+  <div *ngIf="message && crops.length === 0" class="empty-state">
+    <div class="empty-icon">⚠️</div>
+    <p class="empty-text">{{ message }}</p>
+  </div>
+
+  <div *ngIf="crops.length > 0" class="table-card">
+    <div class="table-meta">{{ crops.length }} crop{{ crops.length === 1 ? '' : 's' }} listed</div>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Crop Name</th>
+            <th>Price / kg</th>
+            <th>Quantity</th>
+            <th>Farmer ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let crop of crops">
+            <td><span class="id-badge">#{{ crop.id }}</span></td>
+            <td class="name-cell">{{ crop.name || crop.cropName }}</td>
+            <td class="price-cell">₹{{ crop.price }}</td>
+            <td>{{ crop.quantity || crop.qty }} kg</td>
+            <td class="id-cell">{{ crop.farmerId }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="crops.length === 0 && !message" class="empty-state">
+    <div class="empty-icon">🌾</div>
+    <p class="empty-text">Click "Load Crops" to fetch your listings</p>
+  </div>
+</div>
+
+<style>
+  .page-container { padding: 8px 0; }
+  .list-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; margin-bottom: 28px;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .page-title { font-size: 1.8rem; color: #1b5e20; margin-bottom: 4px; margin-top: 0; }
+  .page-subtitle { color: #6c757d; font-size: 0.95rem; margin: 0; }
+
+  .btn-load {
+    background: linear-gradient(135deg, #2e7d32, #388e3c);
+    color: #fff; padding: 12px 24px; border: none;
+    border-radius: 8px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; white-space: nowrap; font-size: 0.95rem;
+  }
+  .btn-load:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(46,125,50,0.35); }
+
+  .table-card {
+    background: #fff; border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e8f5e9; overflow: hidden;
+  }
+  .table-meta {
+    padding: 14px 20px; font-size: 0.85rem; color: #6c757d;
+    border-bottom: 1px solid #f0f0f0; background: #fafafa;
+  }
+  .table-responsive { overflow-x: auto; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    padding: 12px 16px; text-align: left; font-size: 0.78rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    color: #888; background: #fafafa; border-bottom: 1px solid #eee;
+  }
+  .data-table td {
+    padding: 14px 16px; border-bottom: 1px solid #f5f5f5;
+    font-size: 0.95rem; color: #333;
+  }
+  .data-table tbody tr:hover { background: #f1f8e9; }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+
+  .id-badge {
+    background: #e8f5e9; color: #2e7d32;
+    padding: 3px 10px; border-radius: 20px;
+    font-weight: 700; font-size: 0.82rem;
+  }
+  .name-cell { font-weight: 600; color: #1b5e20; }
+  .price-cell { color: #2e7d32; font-weight: 700; font-size: 1.05rem; }
+  .id-cell { color: #6c757d; font-size: 0.9rem; }
+
+  .empty-state {
+    text-align: center; padding: 60px 24px;
+    background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    border: 1px dashed #c8e6c9;
+  }
+  .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-text { color: #888; font-size: 1rem; margin: 0; }
+</style>
